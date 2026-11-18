@@ -5,6 +5,7 @@
 #include <functional>
 #include <string>
 #include <filesystem>
+#include <Windows.h>
 
 namespace standard {
 	inline std::filesystem::path* path = nullptr;
@@ -74,10 +75,48 @@ namespace standard {
 		std::string arg1 = options.substr(first, second - first);
 		std::string arg2 = options.substr(second + 1);
 
-		std::filesystem::copy_file(*path / arg1, *path / arg2);
+		std::filesystem::copy_file(arg1, arg2);
 
 		return "";
 	}
+
+	std::string mv(std::string options)
+	{
+		size_t first = options.find(' ') + 1;
+		size_t second = options.find(' ', first);
+
+		std::string arg1 = options.substr(first, second - first);
+		std::string arg2 = options.substr(second + 1);
+
+		std::filesystem::rename(arg1, arg2);
+
+		return "";
+	}
+
+	std::string clear(std::string options)
+	{
+		system("cls");
+		
+		return "";
+	}
+
+	std::string ram(std::string options)
+	{
+		MEMORYSTATUSEX mem = {};
+		mem.dwLength = sizeof(mem);
+
+		GlobalMemoryStatusEx(&mem);
+
+		std::string answer = "RAM usage: ";
+		answer += std::to_string((mem.ullTotalPhys - mem.ullAvailPhys) / 1024 / 1024);
+		answer += "MB/";
+		answer += std::to_string(mem.ullTotalPhys / 1024 / 1024);
+		answer += "MB";
+
+		return answer;
+	}
+
+
 
 	void registerLib(std::map<std::string, std::function<std::string(std::string)>>* commands, void (*addHelp)(std::string, std::string), std::filesystem::path* path1, std::string* spath1)
 	{
@@ -89,10 +128,15 @@ namespace standard {
 		(*commands)[std::string("ls")]    = dir;
 		(*commands)[std::string("cp")]    = cp;
 		(*commands)[std::string("copy")]  = cp;
+		(*commands)[std::string("mv")]    = mv;
+		(*commands)[std::string("move")]  = mv;
+		(*commands)[std::string("clear")] = clear;
+		(*commands)[std::string("cls")]   = clear;
+		(*commands)[std::string("ram")]   = ram;
 
 		path                              = path1;
 		spath                             = spath1;
 
-		addHelp("echo MSG - repeats your message\ncd PATH - changes the working directory\nmkdir NAME - creates a directory\nrm FILENAME - removes a file or directory\ndir, ls - lists files and folders in a directory\ncp, copy FILE1 FILE2 - copies a file", "Standard");
+		addHelp("echo MSG - repeats your message\ncd PATH - changes the working directory\nmkdir NAME - creates a directory\nrm FILENAME - removes a file or directory\ndir, ls - lists files and folders in a directory\ncp, copy FILE1 FILE2 - copies a file\nmv, move FILE NEWFILE - moves a file to another directory\nclear, cls - Clears the terminal window.", "Standard");
 	}
 }
