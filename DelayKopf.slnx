@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="DelayKopf/DelayKopf.vcxproj" />
+  <Project Path="DelayKopf/DelayKopf.vcxproj" Id="4b0a65f3-724e-44c8-a063-738e16c6be7e" />
 </Solution>
