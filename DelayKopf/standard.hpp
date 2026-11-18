@@ -19,6 +19,16 @@ namespace standard {
 	std::string cd(std::string options)
 	{
 		std::string newpath = options.substr(options.find(' ') + 1);
+
+		if (newpath.empty())
+		{
+			std::filesystem::current_path(std::filesystem::current_path());
+			*path  = std::filesystem::current_path();
+			*spath = path->string();
+			return "";
+		}
+
+
 		std::filesystem::current_path(*path / newpath);
 		*path               = std::filesystem::current_path();
 		*spath              = path->string();
@@ -28,6 +38,8 @@ namespace standard {
 	std::string mkdir(std::string options)
 	{
 		std::string pathname = options.substr(options.find(' ') + 1);
+		if (pathname.empty())
+			return "";
 		std::filesystem::create_directory(*path / pathname);
 		return                 "";
 	}
@@ -35,6 +47,8 @@ namespace standard {
 	std::string rm(std::string options)
 	{
 		std::string filename = options.substr(options.find(' ') + 1);
+		if (filename.empty())
+			return "";
 		std::filesystem::remove(*path / filename);
 		return                 "";
 	}

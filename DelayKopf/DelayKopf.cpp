@@ -32,6 +32,8 @@ void addtohelp(std::string options, std::string libname)
 int main()
 {
     std::cout << "--- DelayKopf " + std::to_string(ver) + "\n";
+    system("color 4C");
+
     std::string input;
     std::random_device randomDevice;
     std::mt19937 generator(randomDevice());
@@ -84,7 +86,7 @@ int main()
         }
 
         if (!commands.contains(input.substr(0, input.find(' '))))
-            std::cout << "Unknown command \"" << input.substr(0, input.find(' ')) << "\".\n";
+            std::cout << "Ouuuuu shii sorry bro I never heard of \"" << input.substr(0, input.find(' ')) << "\".\n";
         else
             std::cout << commands[input.substr(0, input.find(' '))](input) << "\n";
     }
